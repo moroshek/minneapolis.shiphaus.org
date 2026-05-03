@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSP Shiphaus #1 — May 3, 2026</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2310B981'/><g transform='translate(16,15) scale(0.85)' fill='white'><path d='M0-10 L-3-4 L-8-4 L-8 2 L8 2 L8-4 L3-4Z'/><path d='M-10 3.5 L10 3.5 L7 8 L-7 8Z'/></g></svg>">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="MSP Shiphaus #1 — May 3, 2026">
+    <meta property="og:description" content="Free build day in Minneapolis. Everyone ships.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://minneapolis.shiphaus.org/msp1">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MSP Shiphaus #1 — May 3, 2026">
+    <meta name="twitter:description" content="Free build day in Minneapolis. Everyone ships.">
+
+    <!-- Fonts: Archivo Black (display) + Space Grotesk (body) + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           THEME — MSP Shiphaus #1
+           Dark base, Minneapolis emerald accent.
+           Archivo Black for display, Space Grotesk for body.
+           =========================================== */
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #131313;
+            --text-primary: #ffffff;
+            --text-secondary: #c8c8c8;
+            --text-on-accent: #ffffff;
+            --accent: #10B981;
+            --accent-glow: rgba(16, 185, 129, 0.3);
+            --accent-soft: rgba(16, 185, 129, 0.08);
+
+            --font-display: 'Archivo Black', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --title-size: clamp(2rem, 6vw, 4.5rem);
+            --h2-size: clamp(1.5rem, 4vw, 3rem);
+            --body-size: clamp(0.875rem, 1.8vw, 1.25rem);
+            --small-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            --mono-size: clamp(0.65rem, 1.1vw, 0.85rem);
+
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.75rem, 2vw, 2rem);
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration: 0.6s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle film grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size: 200px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.4;
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           Each slide = one viewport height
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: var(--slide-padding);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1 {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+        }
+
+        .body-text {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-size: var(--mono-size);
+        }
+
+        /* ===========================================
+           SLIDE NUMBER
+           =========================================== */
+        .slide-number {
+            position: absolute;
+            top: var(--slide-padding);
+            left: var(--slide-padding);
+            font-family: var(--font-display);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            opacity: 0.25;
+            letter-spacing: 0.1em;
+        }
+
+        /* ===========================================
+           STEP NUMBER WATERMARK
+           =========================================== */
+        .step-number {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 7rem);
+            color: var(--accent);
+            opacity: 0.1;
+            line-height: 1;
+            position: absolute;
+            top: var(--slide-padding);
+            right: var(--slide-padding);
+        }
+
+        /* ===========================================
+           DARK CARD
+           =========================================== */
+        .dark-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: clamp(8px, 1.5vw, 16px);
+            padding: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        /* ===========================================
+           CODE BLOCK
+           =========================================== */
+        .code-block {
+            background: #060606;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: clamp(6px, 1vw, 12px);
+            padding: clamp(0.75rem, 2vw, 1.5rem);
+            font-family: var(--font-mono);
+            font-size: var(--mono-size);
+            color: #4ade80;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .code-block .prompt {
+            color: var(--text-secondary);
+            user-select: none;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 0.4em 0.8em;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.12);
+            color: var(--text-primary);
+        }
+
+        .copy-btn.copied {
+            color: #4ade80;
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        /* ===========================================
+           KBD — Keyboard key
+           =========================================== */
+        kbd {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+            padding: 0.1em 0.4em;
+            font-family: var(--font-body);
+            font-size: 0.9em;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* ===========================================
+           VS LAYOUT — Side-by-side comparison
+           =========================================== */
+        .vs-layout {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: clamp(0.75rem, 2vw, 2rem);
+            align-items: center;
+            max-width: min(90vw, 900px);
+        }
+
+        .vs-divider {
+            font-family: var(--font-display);
+            font-size: clamp(0.75rem, 1.5vw, 1rem);
+            color: var(--text-secondary);
+            opacity: 0.25;
+        }
+
+        .vs-side {
+            padding: clamp(1rem, 2vw, 2rem);
+            border-radius: clamp(6px, 1vw, 12px);
+        }
+
+        .vs-left {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .vs-right {
+            background: var(--accent-soft);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .vs-label {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.75rem);
+            color: var(--text-secondary);
+        }
+
+        .vs-right .vs-label {
+            color: var(--accent);
+        }
+
+        .vs-quote {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        /* ===========================================
+           STAT BLOCKS — "You're Early" slide
+           Mono Readout — slide-right reveal
+           =========================================== */
+        .stat-block {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s var(--ease-out-expo),
+                        transform 0.7s var(--ease-out-expo);
+        }
+
+        .stat-block.shown {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stat-punchline {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s var(--ease-out-expo),
+                        transform 0.8s var(--ease-out-expo);
+        }
+
+        .stat-punchline.shown {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===========================================
+           PROJECT CARDS — "What People Shipped"
+           =========================================== */
+        .project-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(1.25rem, 2vw, 1.75rem);
+            justify-content: center;
+            max-width: min(95vw, 1100px);
+        }
+
+        .project-card {
+            flex: 0 0 calc(33.333% - 1.5rem);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: clamp(6px, 1vw, 12px);
+            padding: clamp(0.6rem, 1.2vw, 1rem);
+            position: relative;
+            overflow: visible;
+            transition: border-color 0.3s ease, opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .project-card:hover {
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .slide.visible .project-card { opacity: 1; transform: translateY(0); }
+        .slide.visible .project-card:nth-child(1) { transition-delay: 0.3s; }
+        .slide.visible .project-card:nth-child(2) { transition-delay: 0.45s; }
+        .slide.visible .project-card:nth-child(3) { transition-delay: 0.6s; }
+        .slide.visible .project-card:nth-child(4) { transition-delay: 0.75s; }
+        .slide.visible .project-card:nth-child(5) { transition-delay: 0.9s; }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            margin-bottom: clamp(0.2rem, 0.4vw, 0.35rem);
+        }
+
+        .project-name {
+            font-family: var(--font-display);
+            font-size: clamp(0.8rem, 1.3vw, 1.05rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .city-badge {
+            font-family: var(--font-body);
+            font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+            padding: 0.15em 0.5em;
+            border-radius: 100px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .city-badge.chicago { background: rgba(255,107,53,0.15); color: #FF6B35; }
+        .city-badge.new-york { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .city-badge.malaysia { background: rgba(250,204,21,0.15); color: #facc15; }
+        .city-badge.minneapolis { background: rgba(16,185,129,0.15); color: #10B981; }
+
+        /* Thought bubble base */
+        .thought-bubble {
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-family: var(--font-body);
+            font-size: clamp(0.5rem, 0.75vw, 0.65rem);
+            font-weight: 600;
+            padding: 0.3em 0.7em;
+            border-radius: 12px;
+            white-space: nowrap;
+            z-index: 5;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 2px 15px rgba(16,185,129,0.25);
+        }
+        .thought-bubble.orange {
+            background: #FF6B35;
+            color: #fff;
+            box-shadow: 0 2px 15px rgba(255,107,53,0.25);
+        }
+        .thought-bubble.blue {
+            background: #60a5fa;
+            color: #0a0a0a;
+            box-shadow: 0 2px 15px rgba(96,165,250,0.3);
+        }
+        .thought-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 10px;
+            width: 6px; height: 6px;
+            background: inherit;
+            border-radius: 50%;
+        }
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 6px;
+            width: 3px; height: 3px;
+            background: inherit;
+            border-radius: 50%;
+        }
+        .thought-bubble.green {
+            background: var(--accent);
+            color: #0a0a0a;
+            box-shadow: 0 2px 15px rgba(16,185,129,0.3);
+        }
+        .thought-bubble.yellow {
+            background: #facc15;
+            color: #0a0a0a;
+            box-shadow: 0 2px 15px rgba(250,204,21,0.3);
+        }
+
+        @media (max-width: 700px) {
+            .project-card { flex: 0 0 calc(50% - 0.4rem); }
+        }
+        @media (max-width: 480px) {
+            .project-card { flex: 0 0 100%; }
+        }
+
+        .project-builder {
+            font-family: var(--font-body);
+            font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: clamp(0.15rem, 0.3vw, 0.25rem);
+        }
+
+        .project-desc {
+            font-family: var(--font-body);
+            font-size: clamp(0.65rem, 0.95vw, 0.85rem);
+            color: rgba(255,255,255,0.9);
+            line-height: 1.35;
+        }
+
+        /* ===========================================
+           SCHEDULE
+           =========================================== */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.5vh, 0.4rem);
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: baseline;
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            padding: clamp(0.25rem, 0.5vh, 0.4rem) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .schedule-item:last-child { border-bottom: none; }
+
+        .schedule-time {
+            font-family: var(--font-mono);
+            font-size: clamp(0.8rem, 1.3vw, 1rem);
+            color: #fff;
+            font-weight: 500;
+            min-width: clamp(3.5rem, 7vw, 5rem);
+            flex-shrink: 0;
+        }
+
+        .schedule-time.highlight {
+            color: var(--accent);
+        }
+
+        .schedule-label {
+            font-family: var(--font-body);
+            font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+            color: var(--text-secondary);
+        }
+
+        /* ===========================================
+           ANIMATIONS — Reveal on scroll
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(2) { transition-delay: 0.1s; }
+        .reveal:nth-child(3) { transition-delay: 0.2s; }
+        .reveal:nth-child(4) { transition-delay: 0.3s; }
+        .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+        /* ===========================================
+           BACKGROUNDS
+           =========================================== */
+        .dot-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        .glow-bg::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 50%;
+            height: 80%;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            z-index: 100;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.75rem, 2vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .nav-dot:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        /* ===========================================
+           KEYBOARD HINT
+           =========================================== */
+        .keyboard-hint {
+            position: fixed;
+            bottom: clamp(0.75rem, 2vw, 1.5rem);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            opacity: 0.25;
+            z-index: 100;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2.5rem);
+                --content-gap: clamp(0.5rem, 1.5vw, 1rem);
+                --title-size: clamp(1.5rem, 5vw, 3rem);
+                --h2-size: clamp(1.25rem, 3.5vw, 2rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+                --body-size: clamp(0.75rem, 1.3vw, 1rem);
+            }
+            .nav-dots, .keyboard-hint, .step-number { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 4vw, 1.75rem);
+                --body-size: clamp(0.7rem, 1.1vw, 0.9rem);
+            }
+        }
+
+        @media (max-width: 700px) {
+            :root {
+                --title-size: clamp(1.5rem, 8vw, 3rem);
+            }
+            .vs-layout {
+                grid-template-columns: 1fr;
+            }
+            .vs-divider {
+                text-align: center;
+            }
+            .project-card {
+                flex: 0 0 calc(50% - 0.4rem);
+            }
+            .stat-value.ghost,
+            .stat-value.fire {
+                font-size: clamp(2.5rem, 14vw, 6rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-card {
+                flex: 0 0 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+        /* Fullscreen button */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: clamp(0.75rem, 2vw, 1.5rem);
+            right: clamp(0.75rem, 2vw, 1.5rem);
+            width: 28px; height: 28px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.3s ease;
+            color: rgba(255,255,255,0.12);
+            opacity: 0.6;
+        }
+        .fullscreen-btn:hover {
+            opacity: 1;
+            color: rgba(255,255,255,0.35);
+        }
+
+        .slide-nav {
+            position: fixed;
+            bottom: clamp(0.75rem, 2vw, 1.5rem);
+            left: clamp(0.75rem, 2vw, 1.5rem);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+        .slide-nav button {
+            width: 28px; height: 28px;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.15);
+            transition: color 0.2s ease;
+        }
+        .slide-nav button:hover {
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progress"></div>
+
+    <!-- Fullscreen button -->
+    <button class="fullscreen-btn" id="fsBtn" aria-label="Toggle fullscreen" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen()}else{document.exitFullscreen()}">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
+    </button>
+
+    <!-- Navigation dots -->
+    <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+    <!-- Keyboard hint -->
+    <div class="keyboard-hint" id="keyHint">&darr; scroll or press arrows</div>
+
+    <!-- Slide nav arrows -->
+    <div class="slide-nav">
+        <button id="prevBtn" aria-label="Previous slide">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+        </button>
+        <button id="nextBtn" aria-label="Next slide">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3l5 5-5 5"/></svg>
+        </button>
+    </div>
+
+    <!-- ===========================================
+         SLIDE 1: TITLE
+         =========================================== -->
+    <section class="slide dot-bg glow-bg" data-slide="0">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h1 class="reveal" style="font-size: clamp(1.75rem, 5vw, 3.5rem);">MSP <span style="color: var(--accent)">Shiphaus</span> #1</h1>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); font-size: clamp(1rem, 2.5vw, 1.5rem); color: var(--text-primary);">May 3, 2026 &middot; Minneapolis</p>
+            <p class="body-text reveal" style="margin-top: clamp(0.3rem, 0.5vw, 0.5rem); color: rgba(255,255,255,0.95);">Hosted by Jake Moroshek</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 2: TODAY'S SPEAKERS
+         =========================================== -->
+    <section class="slide" data-slide="1">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: clamp(2rem, 4vh, 3rem);">Today's <span style="color: var(--accent);">Speakers.</span></h2>
+            <div class="reveal" style="display: flex; gap: clamp(1.25rem, 2.5vw, 2rem); justify-content: center; max-width: min(95vw, 950px); width: 100%; flex-wrap: wrap;">
+                <div style="flex: 1 1 320px; max-width: 420px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-top: 2px solid var(--accent); border-radius: clamp(10px, 1.5vw, 16px); padding: clamp(1.75rem, 3vw, 2.5rem); text-align: left;">
+                    <p style="font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.55rem); text-transform: uppercase; letter-spacing: -0.01em;">Dan McCreary</p>
+                    <p style="font-family: var(--font-display); font-size: clamp(0.7rem, 1.1vw, 0.85rem); text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-top: clamp(0.4rem, 0.8vh, 0.6rem);">Claude Skills for Intelligent Textbooks</p>
+                    <div style="width: 30px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); margin: clamp(0.75rem, 1.5vh, 1.25rem) 0; opacity: 0.7;"></div>
+                    <p style="font-family: var(--font-body); font-size: clamp(0.75rem, 1.1vw, 0.9rem); color: rgba(255,255,255,0.95); line-height: 1.5;">Retired Senior Distinguished Engineer. Author of <em>Making Sense of NoSQL</em>. AI researcher building open-source Microsims for educational organizations.</p>
+                </div>
+                <div style="flex: 1 1 320px; max-width: 420px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-top: 2px solid var(--accent); border-radius: clamp(10px, 1.5vw, 16px); padding: clamp(1.75rem, 3vw, 2.5rem); text-align: left;">
+                    <p style="font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.55rem); text-transform: uppercase; letter-spacing: -0.01em;">Alex Portnoy</p>
+                    <p style="font-family: var(--font-display); font-size: clamp(0.7rem, 1.1vw, 0.85rem); text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-top: clamp(0.4rem, 0.8vh, 0.6rem);">Speech Act Theory &amp; AI</p>
+                    <div style="width: 30px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); margin: clamp(0.75rem, 1.5vh, 1.25rem) 0; opacity: 0.7;"></div>
+                    <p style="font-family: var(--font-body); font-size: clamp(0.75rem, 1.1vw, 0.9rem); color: rgba(255,255,255,0.95); line-height: 1.5;">Conversational models work better when you understand <em>what your words do</em>. A tour of Speech Act Theory, applied to prompting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: WHAT IS SHIPHAUS
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="2">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <div style="max-width: 750px;">
+                <h2 class="reveal" style="margin-bottom: clamp(2rem, 4vh, 3rem);">What Is <span style="color: var(--accent);">Shiphaus?</span></h2>
+                <!-- Build days -->
+                <p class="reveal" style="font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 2.4rem); text-transform: uppercase; line-height: 1.05; letter-spacing: -0.02em;">Free Build Days.<br><span style="color: var(--accent);">Everyone Ships.</span></p>
+                <!-- Inline stats -->
+                <p class="body-text reveal" style="font-size: clamp(0.75rem, 1.2vw, 0.95rem); color: rgba(255,255,255,0.95); letter-spacing: 0.03em; margin-top: clamp(1rem, 2vh, 1.5rem);"><span style="color: var(--accent); text-shadow: 0 0 30px rgba(16,185,129,0.2);">9</span> events&ensp;&middot;&ensp;<span style="color: var(--accent); text-shadow: 0 0 30px rgba(16,185,129,0.2);">4</span> cities&ensp;&middot;&ensp;<span style="color: var(--accent); text-shadow: 0 0 30px rgba(16,185,129,0.2);">50+</span> shipped&ensp;&middot;&ensp;<span style="color: var(--accent); text-shadow: 0 0 30px rgba(16,185,129,0.2);">100+</span> onboarded</p>
+                <!-- Divider -->
+                <div class="reveal" style="width: clamp(50px, 10vw, 100px); height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.7; margin: clamp(2.5rem, 5vh, 4rem) auto;"></div>
+                <!-- Workshops block -->
+                <p class="reveal" style="font-family: var(--font-display); font-size: clamp(1.2rem, 2.5vw, 2rem); text-transform: uppercase; line-height: 1.1; letter-spacing: -0.01em; color: rgba(255,255,255,0.95);"><span style="color: var(--accent);">AI</span> Workshops &amp;<br>Company Automation</p>
+                <p class="body-text reveal" style="font-size: clamp(0.9rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.95); font-style: italic; margin-top: clamp(0.5rem, 1vh, 0.75rem);">The work no one should be doing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: WHAT PEOPLE HAVE SHIPPED
+         =========================================== -->
+    <section class="slide" data-slide="3">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: clamp(0.3rem, 0.5vh, 0.5rem);">What People Have Shipped<span style="color: var(--accent)">...</span></h2>
+            <p class="reveal" style="font-family: var(--font-display); font-size: clamp(0.9rem, 1.8vw, 1.3rem); text-transform: uppercase; color: var(--accent); margin-bottom: clamp(2.5rem, 5vh, 4rem);">In a single day.</p>
+            <!-- Row 1: 3 cards -->
+            <div class="reveal" style="display: flex; gap: clamp(1.25rem, 2.5vw, 2rem); justify-content: center; max-width: min(90vw, 950px); width: 100%; margin-bottom: clamp(2.5rem, 5vh, 4rem);">
+                <div class="project-card" style="border-left: 5px solid #FF6B35; flex: 1; text-align: left;">
+                    <span class="thought-bubble orange">Consumer App &middot; AI</span>
+                    <div style="display: flex; align-items: center; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                        <img src="https://chicago.shiphaus.org/avatars/makovetsky.png" alt="" style="width: clamp(32px, 4vw, 44px); height: clamp(32px, 4vw, 44px); border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <span class="project-name" style="font-size: clamp(0.9rem, 1.5vw, 1.2rem);">KillTheList</span>
+                            <span class="project-builder">Alexander Makovetsky</span>
+                        </div>
+                        <span class="city-badge chicago" style="flex-shrink: 0;">Chicago</span>
+                    </div>
+                    <p class="project-desc" style="margin-top: clamp(0.3rem, 0.5vw, 0.4rem);">AI grocery assistant for families</p>
+                </div>
+                <div class="project-card" style="border-left: 5px solid #60a5fa; flex: 1; text-align: left;">
+                    <span class="thought-bubble blue">Travel &middot; Maps</span>
+                    <div style="display: flex; align-items: center; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                        <img src="https://lh3.googleusercontent.com/a/ACg8ocKpkg_1c12b754d8GpH1Uxz6RDEV5_QQTIqjggxLzmKvQhK78iIoQ=s96-c" alt="" style="width: clamp(32px, 4vw, 44px); height: clamp(32px, 4vw, 44px); border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <span class="project-name" style="font-size: clamp(0.9rem, 1.5vw, 1.2rem);">Dillydally</span>
+                            <span class="project-builder">Daniel James</span>
+                        </div>
+                        <span class="city-badge new-york" style="flex-shrink: 0;">New York</span>
+                    </div>
+                    <p class="project-desc" style="margin-top: clamp(0.3rem, 0.5vw, 0.4rem);">Find the most fun route, not the fastest</p>
+                </div>
+                <div class="project-card" style="border-left: 5px solid #FF6B35; flex: 1; text-align: left;">
+                    <span class="thought-bubble orange">Home Design &middot; Visualization</span>
+                    <div style="display: flex; align-items: center; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                        <img src="https://chicago.shiphaus.org/avatars/babitsky.png" alt="" style="width: clamp(32px, 4vw, 44px); height: clamp(32px, 4vw, 44px); border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <span class="project-name" style="font-size: clamp(0.9rem, 1.5vw, 1.2rem);">RemodelViz</span>
+                            <span class="project-builder">Alan Babitsky</span>
+                        </div>
+                        <span class="city-badge chicago" style="flex-shrink: 0;">Chicago</span>
+                    </div>
+                    <p class="project-desc" style="margin-top: clamp(0.3rem, 0.5vw, 0.4rem);">Visualize kitchen &amp; bathroom remodels</p>
+                </div>
+            </div>
+            <!-- Row 2: 2 cards, same width as top row cards -->
+            <div class="reveal" style="display: flex; gap: clamp(1.25rem, 2.5vw, 2rem); justify-content: center; max-width: min(60vw, 630px); width: 100%;">
+                <div class="project-card" style="border-left: 5px solid #facc15; flex: 1; text-align: left;">
+                    <span class="thought-bubble yellow">Gov Tech &middot; Forms</span>
+                    <div style="display: flex; align-items: center; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=NetworkSchool&backgroundColor=f4f1d1" alt="" style="width: clamp(32px, 4vw, 44px); height: clamp(32px, 4vw, 44px); border-radius: 50%; flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <span class="project-name" style="font-size: clamp(0.9rem, 1.5vw, 1.2rem);">Digital Arrival Card</span>
+                            <span class="project-builder">Network School</span>
+                        </div>
+                        <span class="city-badge malaysia" style="flex-shrink: 0;">Malaysia</span>
+                    </div>
+                    <p class="project-desc" style="margin-top: clamp(0.3rem, 0.5vw, 0.4rem);">Government arrival form for Malaysia</p>
+                </div>
+                <div class="project-card" style="border-left: 5px solid #FF6B35; flex: 1; text-align: left;">
+                    <span class="thought-bubble orange">Fitness &middot; AI Coach</span>
+                    <div style="display: flex; align-items: center; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                        <img src="https://chicago.shiphaus.org/avatars/ramirez.png" alt="" style="width: clamp(32px, 4vw, 44px); height: clamp(32px, 4vw, 44px); border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <span class="project-name" style="font-size: clamp(0.9rem, 1.5vw, 1.2rem);">Athleteos</span>
+                            <span class="project-builder">Julio Cesar Ramirez Jimenez</span>
+                        </div>
+                        <span class="city-badge chicago" style="flex-shrink: 0;">Chicago</span>
+                    </div>
+                    <p class="project-desc" style="margin-top: clamp(0.3rem, 0.5vw, 0.4rem);">Pro-level training, nutrition &amp; coaching</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 4: YOU'RE EARLY
+         Mono Readout — progressive auto-reveal
+         =========================================== -->
+    <section class="slide" data-slide="4" id="statsSlide">
+        <div class="slide-content">
+            <div style="max-width: 1000px;">
+                <p class="stat-block" style="font-family: var(--font-mono); font-size: var(--mono-size); color: rgba(255,255,255,0.95); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: clamp(2rem, 4vh, 3rem);">// ai adoption — global</p>
+                <div class="stat-block" style="display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: clamp(1.25rem, 2.5vh, 2rem); border-bottom: 2px solid rgba(255,255,255,0.2);">
+                    <span style="font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1; color: rgba(255,255,255,0.7); letter-spacing: -0.03em; width: clamp(10rem, 30vw, 20rem); flex-shrink: 0;">~16%</span>
+                    <div>
+                        <p style="font-family: var(--font-body); font-size: clamp(1rem, 1.6vw, 1.25rem); color: #fff;">have chatted with AI</p>
+                        <p style="font-family: var(--font-mono); font-size: clamp(0.7rem, 1vw, 0.85rem); color: rgba(255,255,255,0.7); margin-top: 0.3rem;">~1.3 billion people</p>
+                    </div>
+                </div>
+                <div class="stat-block" style="display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.5rem); padding: clamp(1.25rem, 2.5vh, 2rem) 0;">
+                    <span style="font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1; color: var(--accent); letter-spacing: -0.03em; text-shadow: 0 0 50px rgba(16,185,129,0.4); width: clamp(10rem, 30vw, 20rem); flex-shrink: 0;">0.04%</span>
+                    <div>
+                        <p style="font-family: var(--font-body); font-size: clamp(1rem, 1.6vw, 1.25rem); color: #fff;">build with it</p>
+                        <p style="font-family: var(--font-mono); font-size: clamp(0.7rem, 1vw, 0.85rem); color: var(--accent); margin-top: 0.3rem;">~3-5 million people</p>
+                    </div>
+                </div>
+                <p class="stat-punchline" style="font-size: clamp(1.5rem, 3.5vw, 2.8rem); margin-top: clamp(2rem, 4vh, 3rem);">You're <span style="color: var(--accent);">0.04%.</span><br>You're <span style="color: var(--accent);">early.</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 5: SCHEDULE
+         =========================================== -->
+    <section class="slide" data-slide="5">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Today's <span style="color: var(--accent)">Schedule.</span></h2>
+            <div class="dark-card reveal" style="max-width: min(90vw, 500px); text-align: left;">
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:30</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Doors + arrival</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:45</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Opening remarks</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">11:00</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Optional Claude / Codex setup</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time highlight">11:30</span>
+                        <span class="schedule-label" style="color: var(--text-primary); font-weight: 600;">Build time</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">12:15</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Lunch + Dan McCreary talk</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">12:45</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Alex Portnoy talk</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time highlight">1:30</span>
+                        <span class="schedule-label" style="color: var(--text-primary); font-weight: 600;">Build continues</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">4:30</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Demos</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">5:30</span>
+                        <span class="schedule-label" style="color: rgba(255,255,255,0.95);">Wrap</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 6: WIFI
+         =========================================== -->
+    <section class="slide" data-slide="6">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Get on<br><span style="color: var(--accent)">WiFi.</span></h2>
+            <div class="dark-card reveal" style="padding: clamp(2rem, 4vw, 3.5rem); text-align: center;">
+                <p class="body-text" style="color: var(--text-primary); font-size: clamp(1rem, 2vw, 1.35rem);">Network: <strong>TBD</strong></p>
+                <p class="body-text" style="color: var(--text-primary); font-size: clamp(1rem, 2vw, 1.35rem); margin-top: clamp(0.3rem, 0.5vw, 0.5rem);">Password: <strong>TBD</strong></p>
+                <p class="body-text" style="color: rgba(255,255,255,0.7); font-size: clamp(0.8rem, 1.3vw, 1rem); margin-top: clamp(1rem, 2vh, 1.5rem); font-style: italic;">Posted on the screen at arrival. Ask Jake if you can't find it.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 7: STAY IN TOUCH
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="7">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Stay in <span style="color: var(--accent)">Touch.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 500px; color: rgba(255,255,255,0.95);">Submit your project, see what others built, and find the next MSP build day.</p>
+            <div class="dark-card reveal" style="padding: clamp(1.5rem, 3vw, 2.5rem); text-align: center;">
+                <p class="body-text" style="color: var(--text-primary); font-size: clamp(1.1rem, 2vw, 1.5rem);"><a href="https://shiphaus.org/minneapolis" style="color: var(--accent); text-decoration: underline; text-underline-offset: 4px;">shiphaus.org/minneapolis</a></p>
+                <p class="body-text" style="color: rgba(255,255,255,0.7); font-size: clamp(0.8rem, 1.3vw, 1rem); margin-top: clamp(0.75rem, 1.5vh, 1.25rem);">Or find Jake: <strong style="color: var(--text-primary);">@moroshek</strong> on X</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 8: DYAC
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="8">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap); font-size: var(--title-size);">D.Y.A.C.</h2>
+            <p class="body-text reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.75rem); color: var(--text-primary);">Did You Ask <span style="color: var(--accent)">Claude?</span></p>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); max-width: 500px; color: rgba(255,255,255,0.95);">Before asking a neighbor, before raising your hand &mdash; try asking Claude first. That's the whole point. You'll be surprised how far it gets you.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 9: LIVE DEMO
+         =========================================== -->
+    <section class="slide glow-bg" data-slide="9">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <p class="reveal" style="font-family: var(--font-body); font-size: clamp(0.65rem, 0.9vw, 0.8rem); text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255,255,255,0.95); margin-bottom: clamp(1.5rem, 3vh, 2.5rem);">Live Demo</p>
+            <h2 class="reveal" style="font-size: var(--title-size);">Live Building Demo<br><span style="color: var(--accent);">&amp; Onboarding</span></h2>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); max-width: 500px; font-size: clamp(1rem, 1.8vw, 1.35rem); color: rgba(255,255,255,0.95);">Building &ldquo;Who Is in the Room&rdquo; &mdash; live, from scratch, in Claude Code.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 10: CHAT VS CLAUDE CODE
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="10">
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Chat Gives Advice.<br><span style="color: var(--accent)">Claude Code Does the Work.</span></h2>
+            <div class="vs-layout reveal">
+                <div class="vs-side vs-left">
+                    <div class="vs-label">Chat</div>
+                    <div class="vs-quote">&ldquo;How do I make a website?&rdquo;</div>
+                    <p class="body-text" style="margin-top: 0.5rem; font-size: var(--small-size); opacity: 0.6;">You get instructions. You figure out the rest.</p>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="vs-side vs-right">
+                    <div class="vs-label">Claude Code</div>
+                    <div class="vs-quote">&ldquo;Make me a website.&rdquo;</div>
+                    <p class="body-text" style="margin-top: 0.5rem; font-size: var(--small-size); opacity: 0.8;">You get a real, working website you can share.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 9: HOW IT WORKS
+         =========================================== -->
+    <section class="slide" data-slide="11">
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">You Talk. It Builds.<br><span style="color: var(--accent)">You Refine.</span></h2>
+            <p class="body-text reveal" style="max-width: 550px;">Describe what you want in plain English. Claude builds it behind the scenes &mdash; you just see the result. Don't like something? Say &ldquo;make the header bigger&rdquo; or &ldquo;change the color.&rdquo; It's a back-and-forth, like texting a really talented friend.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 10: STEP 01 — CLAUDE PRO
+         =========================================== -->
+    <section class="slide" data-slide="12">
+        <span class="step-number">01</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Sign Up for<br><span style="color: var(--accent)">Claude Pro.</span></h2>
+            <p class="body-text reveal">$20/month at <a href="https://claude.ai" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">claude.ai</a></p>
+            <p class="body-text reveal" style="margin-top: clamp(0.3rem, 0.5vw, 0.5rem); color: rgba(255,255,255,0.95);">Open claude.ai on your phone or laptop and sign up now. We'll wait.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         THREE WAYS TO BUILD
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="13">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h2 class="reveal" style="margin-bottom: clamp(2rem, 4vh, 3rem);">Three Ways to <span style="color: var(--accent);">Build.</span></h2>
+            <div class="reveal" style="display: flex; gap: clamp(0.75rem, 1.5vw, 1.25rem); justify-content: center; max-width: min(95vw, 1000px); width: 100%;">
+                <!-- Chat -->
+                <div style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: clamp(1rem, 2vw, 1.5rem); text-align: left;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">
+                        <span style="font-family: var(--font-display); font-size: clamp(0.9rem, 1.5vw, 1.2rem); text-transform: uppercase;">Claude Chat</span>
+                        <span style="font-size: clamp(0.5rem, 0.7vw, 0.6rem); font-weight: 600; padding: 0.2em 0.5em; border-radius: 100px; background: rgba(74,222,128,0.15); color: #4ade80;">Ready Now</span>
+                    </div>
+                    <p style="font-size: clamp(0.65rem, 0.9vw, 0.8rem); color: rgba(255,255,255,0.7); margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">claude.ai or desktop app</p>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vh, 0.3rem);">
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Build interactive prototypes</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Write business plans &amp; pitch decks</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Generate marketing copy</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Spreadsheet formulas &amp; analysis</li>
+                    </ul>
+                </div>
+                <!-- Cowork -->
+                <div style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: clamp(1rem, 2vw, 1.5rem); text-align: left;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">
+                        <span style="font-family: var(--font-display); font-size: clamp(0.9rem, 1.5vw, 1.2rem); text-transform: uppercase;">Claude Cowork</span>
+                        <span style="font-size: clamp(0.5rem, 0.7vw, 0.6rem); font-weight: 600; padding: 0.2em 0.5em; border-radius: 100px; background: rgba(74,222,128,0.15); color: #4ade80;">Ready Now</span>
+                    </div>
+                    <p style="font-size: clamp(0.65rem, 0.9vw, 0.8rem); color: rgba(255,255,255,0.7); margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">Desktop app &middot; works with your files</p>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vh, 0.3rem);">
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Turn meeting notes into action items</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Organize &amp; rename files</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Research a topic &amp; write a report</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Build presentations from your docs</li>
+                    </ul>
+                </div>
+                <!-- Code -->
+                <div style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-left: 5px solid var(--accent); border-radius: 12px; padding: clamp(1rem, 2vw, 1.5rem); text-align: left;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">
+                        <span style="font-family: var(--font-display); font-size: clamp(0.9rem, 1.5vw, 1.2rem); text-transform: uppercase; color: var(--accent);">Claude Code</span>
+                        <span style="font-size: clamp(0.5rem, 0.7vw, 0.6rem); font-weight: 600; padding: 0.2em 0.5em; border-radius: 100px; background: rgba(255,107,53,0.15); color: var(--accent);">Setup Required</span>
+                    </div>
+                    <p style="font-size: clamp(0.65rem, 0.9vw, 0.8rem); color: rgba(255,255,255,0.7); margin-bottom: clamp(0.5rem, 1vh, 0.75rem);">Terminal &middot; most powerful</p>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vh, 0.3rem);">
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Build &amp; deploy full websites</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Create mobile &amp; web apps</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Automate workflows &amp; data pipelines</li>
+                        <li style="font-size: clamp(0.65rem, 0.95vw, 0.8rem); color: rgba(255,255,255,0.9); padding-left: 1em; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">&bull;</span>Build AI-powered tools &amp; dashboards</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 11: STEP 02 — TERMINAL
+         =========================================== -->
+    <section class="slide" data-slide="14">
+        <span class="step-number">02</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Open Your<br><span style="color: var(--accent)">Terminal.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 550px;">Terminal is a text-based way to talk to your computer. It looks techy, but all you'll do is paste a couple of commands.</p>
+            <div class="reveal" style="max-width: min(90vw, 500px); display: flex; flex-direction: column; gap: clamp(0.5rem, 1vw, 0.75rem);">
+                <div class="dark-card" style="padding: clamp(1rem, 2vw, 1.5rem);">
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">Mac</span>
+                    <p class="body-text" style="color: var(--text-primary); margin-top: 0.3rem;"><kbd>Cmd</kbd> + <kbd>Space</kbd> &rarr; type <strong>&ldquo;Terminal&rdquo;</strong> &rarr; <kbd>Enter</kbd></p>
+                </div>
+                <div class="dark-card" style="padding: clamp(1rem, 2vw, 1.5rem);">
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">PC</span>
+                    <p class="body-text" style="color: var(--text-primary); margin-top: 0.3rem;">Press <kbd>Windows</kbd> key &rarr; type <strong>&ldquo;PowerShell&rdquo;</strong> &rarr; <kbd>Enter</kbd></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 12: STEP 03 — INSTALL
+         =========================================== -->
+    <section class="slide" data-slide="15">
+        <span class="step-number">03</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Install<br><span style="color: var(--accent)">Claude Code.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 550px;">Copy your command, paste it into your terminal, press Enter. Takes about two minutes. Do it now &mdash; we'll wait.</p>
+            <div class="reveal" style="max-width: min(90vw, 650px); display: flex; flex-direction: column; gap: clamp(0.5rem, 1vw, 0.75rem);">
+                <div>
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">Mac / Linux</span>
+                    <div class="code-block" style="margin-top: 0.3rem;">
+                        <code><span class="prompt">$ </span>curl -fsSL https://claude.ai/install.sh | bash</code>
+                        <button class="copy-btn" onclick="copyText(this, 'curl -fsSL https://claude.ai/install.sh | bash')">Copy</button>
+                    </div>
+                </div>
+                <div>
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">PC (PowerShell)</span>
+                    <div class="code-block" style="margin-top: 0.3rem;">
+                        <code><span class="prompt">&gt; </span>npm install -g @anthropic-ai/claude-code</code>
+                        <button class="copy-btn" onclick="copyText(this, 'npm install -g @anthropic-ai/claude-code')">Copy</button>
+                    </div>
+                    <p class="body-text" style="font-size: var(--small-size); opacity: 0.7; margin-top: 0.3rem;">Need Node.js first? Get it at <a href="https://nodejs.org" target="_blank" rel="noopener" style="color: var(--accent); text-underline-offset: 3px;">nodejs.org</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 13: STEP 04 — FOLDER
+         =========================================== -->
+    <section class="slide" data-slide="16">
+        <span class="step-number">04</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Make a Folder on<br>Your Desktop Called<br><span style="color: var(--accent)">&ldquo;my-site&rdquo;</span></h2>
+            <p class="body-text reveal" style="max-width: 550px;">Right-click your Desktop. New Folder. Name it <strong>my-site</strong>. That's where your project will live.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 14: STEP 05 — LAUNCH
+         =========================================== -->
+    <section class="slide" data-slide="17">
+        <span class="step-number">05</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Launch<br><span style="color: var(--accent)">Claude Code.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 550px;">Go back to your terminal. Paste your command &mdash; it opens Claude Code inside your new folder.</p>
+            <div class="reveal" style="max-width: min(90vw, 650px); display: flex; flex-direction: column; gap: clamp(0.5rem, 1vw, 0.75rem);">
+                <div>
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">Mac</span>
+                    <div class="code-block" style="margin-top: 0.3rem;">
+                        <code><span class="prompt">$ </span>cd ~/Desktop/my-site && claude</code>
+                        <button class="copy-btn" onclick="copyText(this, 'cd ~/Desktop/my-site && claude')">Copy</button>
+                    </div>
+                </div>
+                <div>
+                    <span class="mono" style="color: var(--accent); font-size: var(--small-size);">PC</span>
+                    <div class="code-block" style="margin-top: 0.3rem;">
+                        <code><span class="prompt">&gt; </span>cd ~\Desktop\my-site; claude</code>
+                        <button class="copy-btn" onclick="copyText(this, 'cd ~\\Desktop\\my-site; claude')">Copy</button>
+                    </div>
+                </div>
+            </div>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); max-width: 550px; opacity: 0.6;">A browser window pops up &mdash; sign in with your Claude account. When you see a blinking cursor, you're in.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 15: STEP 06 — MODEL
+         =========================================== -->
+    <section class="slide" data-slide="18">
+        <span class="step-number">06</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Switch to the<br><span style="color: var(--accent)">Latest Model.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 550px;">Claude Code may default to an older model. Type this command and pick the newest one from the list.</p>
+            <div class="code-block reveal" style="max-width: min(90vw, 400px);">
+                <code>/model</code>
+                <button class="copy-btn" onclick="copyText(this, '/model')">Copy</button>
+            </div>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); max-width: 550px; opacity: 0.6;">Select <strong>claude-opus-4-7</strong>. Better model = better results.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 16: STEP 07 — FRONTEND DESIGN
+         =========================================== -->
+    <section class="slide dot-bg" data-slide="19">
+        <span class="step-number">07</span>
+        <div class="slide-content">
+            <h2 class="reveal" style="margin-bottom: var(--content-gap);">Install<br><span style="color: var(--accent)">/frontend-design.</span></h2>
+            <p class="body-text reveal" style="margin-bottom: var(--content-gap); max-width: 550px;">This skill makes Claude way better at building beautiful websites. Paste this command into Claude Code.</p>
+            <div class="code-block reveal" style="max-width: min(90vw, 550px);">
+                <code>/install-skill frontend-design</code>
+                <button class="copy-btn" onclick="copyText(this, '/install-skill frontend-design')">Copy</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 17: CLOSING
+         =========================================== -->
+    <section class="slide dot-bg glow-bg" data-slide="20">
+        <div class="slide-content" style="align-items: center; text-align: center;">
+            <h1 class="reveal">You're Set Up.<br><span style="color: var(--accent)">Go Build.</span></h1>
+            <p class="body-text reveal" style="margin-top: var(--content-gap); opacity: 0.7;">If you get stuck, ask Claude first. Then ask a neighbor.</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+       SLIDE CONTROLLER
+       =========================================== -->
+    <script>
+        /* Copy to clipboard */
+        function copyText(btn, text) {
+            navigator.clipboard.writeText(text);
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.isScrolling = false;
+                this.isNavigating = false;
+                this.scrollTimeout = null;
+
+                this.createNavDots();
+                this.setupObserver();
+                this.bindEvents();
+                this.updateProgress();
+
+                this.slides[0].classList.add('visible');
+                this.hasNavigated = false;
+            }
+
+            createNavDots() {
+                const container = document.getElementById('navDots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('nav-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    container.appendChild(dot);
+                });
+                this.dots = container.querySelectorAll('.nav-dot');
+            }
+
+            setupObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const index = parseInt(entry.target.dataset.slide);
+                            this.currentSlide = index;
+                            this.updateDots();
+                            this.updateProgress();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            bindEvents() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') {
+                        e.preventDefault();
+                        this.nextSlide();
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.prevSlide();
+                    }
+                });
+
+                // Click to advance
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.nav-dot, .copy-btn, .fullscreen-btn, .slide-nav, a, button')) return;
+                    this.nextSlide();
+                });
+
+                document.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (this.isScrolling) return;
+                    if (Math.abs(e.deltaY) < 15) return;
+                    this.isScrolling = true;
+
+                    if (e.deltaY > 0) this.nextSlide();
+                    else this.prevSlide();
+
+                    clearTimeout(this.scrollTimeout);
+                    this.scrollTimeout = setTimeout(() => {
+                        this.isScrolling = false;
+                    }, 1200);
+                }, { passive: false });
+
+                let touchStartY = 0;
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const diff = touchStartY - e.changedTouches[0].clientY;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                }, { passive: true });
+            }
+
+            goToSlide(index) {
+                if (index < 0 || index >= this.totalSlides) return;
+                this.hideHint();
+                this.slides[index].scrollIntoView({ behavior: 'smooth' });
+            }
+
+            nextSlide() { this.goToSlide(this.currentSlide + 1); }
+            prevSlide() { this.goToSlide(this.currentSlide - 1); }
+
+            updateDots() {
+                this.dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            updateProgress() {
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                document.getElementById('progress').style.width = progress + '%';
+            }
+
+            hideHint() {
+                if (!this.hasNavigated) {
+                    this.hasNavigated = true;
+                    document.getElementById('keyHint').style.opacity = '0';
+                }
+            }
+        }
+
+        const deck = new SlidePresentation();
+        document.getElementById('prevBtn').addEventListener('click', () => deck.prevSlide());
+        document.getElementById('nextBtn').addEventListener('click', () => deck.nextSlide());
+
+        /* ===========================================
+           PROGRESSIVE STATS — "You're Early" slide
+           Auto-reveals on timed sequence when visible
+           =========================================== */
+        (function() {
+            const slide = document.querySelector('#statsSlide');
+            const statBlocks = slide.querySelectorAll('.stat-block');
+            const punchline = slide.querySelector('.stat-punchline');
+            let triggered = false;
+
+            const obs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting && !triggered) {
+                        triggered = true;
+                        // Comment header
+                        setTimeout(function() { statBlocks[0].classList.add('shown'); }, 200);
+                        // 16% stat
+                        setTimeout(function() { statBlocks[1].classList.add('shown'); }, 600);
+                        // 0.04% stat
+                        setTimeout(function() { statBlocks[2].classList.add('shown'); }, 1800);
+                        // Punchline
+                        setTimeout(function() { punchline.classList.add('shown'); }, 3200);
+                    }
+                });
+            }, { threshold: 0.5 });
+            obs.observe(slide);
+        })();
+    </script>
+</body>
+</html>
