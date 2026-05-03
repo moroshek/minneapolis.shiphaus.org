@@ -16,11 +16,14 @@ python3 -m http.server 8000
 
 ## Deploy
 
+Hosted on Netlify. Push to `main` triggers auto-deploy.
+
 ```bash
-vercel --prod
+# manual deploy via CLI:
+netlify deploy --prod
 ```
 
-Then in the Vercel dashboard, add the custom domain `minneapolis.shiphaus.org` and follow the DNS instructions (usually a CNAME on the `minneapolis` subdomain to `cname.vercel-dns.com`).
+In the Netlify dashboard: **Domain settings** → add custom domain `minneapolis.shiphaus.org` → follow the DNS prompt (CNAME `minneapolis` → `<site>.netlify.app`, or use Netlify DNS for the apex if shiphaus.org is delegated).
 
 ## Convention
 

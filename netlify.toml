@@ -1,0 +1,11 @@
+[build]
+  publish = "."
+
+[build.processing.html]
+  pretty_urls = true
+
+[[redirects]]
+  from = "/"
+  to = "/msp1"
+  status = 302
+  force = false
